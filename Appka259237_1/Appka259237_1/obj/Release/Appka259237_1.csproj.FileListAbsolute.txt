@@ -1,0 +1,8 @@
+C:\Users\student\source\repos\Appka259237_1\Appka259237_1\bin\Release\Appka259237_1.exe.config
+C:\Users\student\source\repos\Appka259237_1\Appka259237_1\bin\Release\Appka259237_1.exe
+C:\Users\student\source\repos\Appka259237_1\Appka259237_1\bin\Release\Appka259237_1.pdb
+C:\Users\student\source\repos\Appka259237_1\Appka259237_1\obj\Release\Appka259237_1.csproj.AssemblyReference.cache
+C:\Users\student\source\repos\Appka259237_1\Appka259237_1\obj\Release\Appka259237_1.csproj.SuggestedBindingRedirects.cache
+C:\Users\student\source\repos\Appka259237_1\Appka259237_1\obj\Release\Appka259237_1.csproj.CoreCompileInputs.cache
+C:\Users\student\source\repos\Appka259237_1\Appka259237_1\obj\Release\Appka259237_1.exe
+C:\Users\student\source\repos\Appka259237_1\Appka259237_1\obj\Release\Appka259237_1.pdb
