@@ -9,28 +9,130 @@ namespace Appka259237_1
 {
     internal class Backpack
     {
-        public List<string> item_name  = new List<string>();
-        public List<int> item_value = new List<int>();
-        public List<int> item_mass = new List<int>();
-        public List<int> val_to_mass_ratio = new List<int>();
+        public List<Przedmiot> Items = new List<Przedmiot>();
+        public List<Przedmiot> ItemsInBackpack = new List<Przedmiot>();
+        private int max_weight = 0;
+        public  int MaxWeight { get { return max_weight; } set { max_weight = value; } }
 
-        private int max_weight;
+        private int current_weight = 0;
+        public  int CurrentWeight { get { return current_weight; } }
+
+        private int number_of_itmes = 0;
 
         public Backpack(int num_of_items, int max_weight_limit,int seed)
         {
             this.max_weight = max_weight_limit;
-        
-            Generator rng = new Generator();
+            this.number_of_itmes=num_of_items;
+
+            Generator rng = new Generator(seed);
+
+            Console.WriteLine("Avalible items: ");
             for(int i = 0; i < num_of_items; i++)
             {
-                item_name.Add("Przedmiot nr." + i.ToString() + "/n");
-                item_value.Add(rng.rand(0,100));
-                item_mass.Add(rng.rand(1,20));
-                Console.WriteLine("Item name / Item value / Item mass");
-                Console.WriteLine(item_name[i] + " " + item_value[i] + " " + item_mass[i]);
-                
+                Przedmiot buf_Item = new Przedmiot();
+                buf_Item.Name = "Przedmiot nr." + i.ToString();
+                buf_Item.Value = rng.rand(1,100);
+                buf_Item.Weight = rng.rand(1,20);
+
+                buf_Item.ValueToWeightRatio = ((float)buf_Item.Value/(float)buf_Item.Weight);
+                Console.WriteLine("Itme Name: " + buf_Item.Name + " Item Value: " + buf_Item.Value + " Item Weight: " + buf_Item.Weight + " Item V/W ratio: " + buf_Item.ValueToWeightRatio);
+                this.Items.Add(buf_Item);
             }
         }
-        public
+        public void Clear() { ItemsInBackpack.Clear(); current_weight = 0; Console.WriteLine("Backpack cleared..."); }
+
+        public void Contents()
+        {
+            Console.WriteLine("Backpack contents: ");
+            if (this.ItemsInBackpack.Count() == 0) Console.WriteLine("empty");
+            for (int i = 0; i < this.ItemsInBackpack.Count(); i++)
+            {
+                Console.WriteLine("Itme Name: " + this.ItemsInBackpack[i].Name +
+                                  " Item Value: " + this.ItemsInBackpack[i].Value +
+                                  " Item Weight: " + this.ItemsInBackpack[i].Weight +
+                                  " Item V/W ratio: " + this.ItemsInBackpack[i].ValueToWeightRatio);
+            }
+
+        }
+        public void FastSort()
+        {
+            Console.WriteLine("Fast Sort ");
+            for(int i = 0; i < Items.Count() ; i++)
+            {
+                if (current_weight < max_weight)
+                {
+                    current_weight += Items[i].Weight;
+                    if (current_weight > max_weight) { current_weight -= Items[i].Weight; continue; }
+                    ItemsInBackpack.Add(Items[i]);
+                }
+            }
+        }
+
+        public void BestValueSort()
+        {
+            Console.WriteLine("Best Value Sort");
+            var orderByResult = from s in Items
+                                orderby s.Value descending
+                                select s;
+
+            foreach (var item in orderByResult)
+            {
+                Console.WriteLine("Itme Name: " + item.Name +
+                                  " Item Value: " + item.Value +
+                                  " Item Weight: " + item.Weight +
+                                  " Item V/W ratio: " + item.ValueToWeightRatio);
+                current_weight += item.Weight;
+                if(current_weight > max_weight) { current_weight -= item.Weight;  continue; }
+                ItemsInBackpack.Add(item);
+            }
+        }
+
+        public void BestRatioSort()
+        {
+            Console.WriteLine("Best Ratio Sort ");
+            var orderByResult = from s in Items
+                                orderby s.ValueToWeightRatio descending
+                                select s;
+
+            foreach (var item in orderByResult)
+            {
+                if (current_weight < max_weight)
+                {
+                    current_weight += item.Weight;
+                    if (current_weight > max_weight) { current_weight -= item.Weight; continue; }
+                    ItemsInBackpack.Add(item);
+                }
+            }
+
+  
+        }
+
+        public void PDSort()
+        {
+            Console.WriteLine("PD Sort ");
+            int[,] Matrix = new int[number_of_itmes+1, max_weight+1];
+            for (int i = 0; i < max_weight +1; i++) Matrix[0, i] = 0;
+            for (int i = 0; i < number_of_itmes + 1; i++) Matrix[i, 0] = 0;
+
+            for (int i = 1; i < number_of_itmes + 1; i++)
+            {
+                Console.WriteLine(Items[i - 1].Name);
+                for(int j = 1; j < max_weight+1; j++)
+                {
+                    if (Items[i - 1].Weight > j) { Matrix[i, j] = Matrix[i - 1, j]; }
+                    if (Items[i - 1].Weight <= j) { Matrix[i,j] = Math.Max(Matrix[i - 1, j], Matrix[i - 1, j - Items[i - 1].Weight] + Items[i - 1].Value); }
+                    //Matrix[i, j] = 0;
+                }
+            }
+            for (int i = 0; i < number_of_itmes + 1; i++)
+            {
+                for (int j = 0; j < max_weight+1; j++)
+                {
+                    Console.Write(Matrix[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+
     }
 }
