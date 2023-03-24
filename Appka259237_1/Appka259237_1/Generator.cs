@@ -14,13 +14,15 @@ namespace Appka259237_1
         public Generator()
         {
             this.Seed = 1;
+            random_num = new Random(1);
         }
         public Generator(int new_seed)
         {
             this.Seed = new_seed;
+            random_num = new Random(Seed);
         }
 
-        Random random_num = new Random();
+        Random random_num;
         public int rand(int low, int high)
         {
             return random_num.Next(low, high);
